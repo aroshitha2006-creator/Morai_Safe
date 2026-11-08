@@ -1,0 +1,151 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Registered citizen profile on Morai Safe platform",
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 20 },
+        "preferredDistrict": { "type": "string", "maxLength": 50 },
+        "isEmailVerified": { "type": "boolean" },
+        "role": { "type": "string", "enum": ["user", "admin"] },
+        "createdAt": { "type": "string" },
+        "lastLogin": { "type": "string" }
+      },
+      "required": ["fullName", "email", "phone", "preferredDistrict", "isEmailVerified", "role"]
+    },
+    "EmergencyAlert": {
+      "title": "EmergencyAlert",
+      "description": "Multi-hazard emergency broadcast published by authorized officers",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "category": { "type": "string", "enum": ["flood", "cyclone", "heavy_rainfall", "earthquake", "landslide", "fire", "tsunami", "industrial_hazard", "general"] },
+        "severity": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+        "affectedArea": { "type": "string", "maxLength": 300 },
+        "publishedAt": { "type": "string" },
+        "expiresAt": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "archived", "expired"] },
+        "acknowledgedCount": { "type": "number" }
+      },
+      "required": ["title", "description", "category", "severity", "affectedArea", "publishedAt", "status"]
+    },
+    "Facility": {
+      "title": "Facility",
+      "description": "Verified shelter, safe zone, hospital, or fire station point of interest",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 150 },
+        "type": { "type": "string", "enum": ["safe_zone", "emergency_shelter", "hospital", "fire_station", "police_station", "evacuation_center"] },
+        "address": { "type": "string", "maxLength": 300 },
+        "district": { "type": "string", "maxLength": 60 },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "phone": { "type": "string", "maxLength": 30 },
+        "capacity": { "type": "number" },
+        "currentOccupancy": { "type": "number" },
+        "status": { "type": "string", "enum": ["open", "high_occupancy", "full", "standby"] },
+        "isVerified": { "type": "boolean" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "type", "address", "district", "lat", "lng", "phone", "status", "isVerified"]
+    },
+    "AlertAcknowledgement": {
+      "title": "AlertAcknowledgement",
+      "description": "Citizen safety confirmation of an emergency alert",
+      "type": "object",
+      "properties": {
+        "alertId": { "type": "string", "maxLength": 100 },
+        "userId": { "type": "string", "maxLength": 100 },
+        "userName": { "type": "string", "maxLength": 100 },
+        "userLocation": { "type": "string", "maxLength": 100 },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["alertId", "userId", "userName", "timestamp"]
+    },
+    "IncidentReport": {
+      "title": "IncidentReport",
+      "description": "Citizen reported disaster hazard undergoing moderation",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 100 },
+        "userName": { "type": "string", "maxLength": 100 },
+        "userPhone": { "type": "string", "maxLength": 30 },
+        "incidentType": { "type": "string", "enum": ["flooding", "tree_fall", "structural_damage", "trapped_persons", "power_hazard", "other"] },
+        "title": { "type": "string", "maxLength": 150 },
+        "description": { "type": "string", "maxLength": 1500 },
+        "district": { "type": "string", "maxLength": 60 },
+        "locationDetails": { "type": "string", "maxLength": 200 },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "reportedAt": { "type": "string" }
+      },
+      "required": ["userName", "userPhone", "incidentType", "title", "description", "district", "locationDetails", "status", "reportedAt"]
+    },
+    "BroadcastCampaign": {
+      "title": "BroadcastCampaign",
+      "description": "Mass multi-channel disaster alert broadcast archive",
+      "type": "object",
+      "properties": {
+        "subject": { "type": "string", "maxLength": 200 },
+        "severity": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+        "targetDistrict": { "type": "string", "maxLength": 100 },
+        "category": { "type": "string" },
+        "body": { "type": "string", "maxLength": 3000 },
+        "sentAt": { "type": "string" },
+        "sentBy": { "type": "string" },
+        "recipientCount": { "type": "number" },
+        "deliveredCount": { "type": "number" },
+        "failedCount": { "type": "number" },
+        "status": { "type": "string", "enum": ["sent", "processing", "failed"] }
+      },
+      "required": ["subject", "severity", "targetDistrict", "body", "sentAt", "sentBy", "recipientCount", "status"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Immutable administrator activity log for security compliance",
+      "type": "object",
+      "properties": {
+        "adminEmail": { "type": "string", "maxLength": 120 },
+        "adminName": { "type": "string", "maxLength": 100 },
+        "action": { "type": "string", "maxLength": 80 },
+        "category": { "type": "string", "enum": ["alert", "facility", "broadcast", "incident", "user", "auth"] },
+        "details": { "type": "string", "maxLength": 1000 },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["adminEmail", "adminName", "action", "category", "details", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Private profile of registered citizens"
+    },
+    "/alerts/{alertId}": {
+      "schema": "EmergencyAlert",
+      "description": "Public emergency alerts and disaster directives"
+    },
+    "/safeZones/{facilityId}": {
+      "schema": "Facility",
+      "description": "Verified emergency shelters and high-ground safe zones"
+    },
+    "/alertAcknowledgements/{ackId}": {
+      "schema": "AlertAcknowledgement",
+      "description": "Citizen safety reception logs"
+    },
+    "/incidentReports/{incidentId}": {
+      "schema": "IncidentReport",
+      "description": "Community field disaster reports"
+    },
+    "/broadcasts/{broadcastId}": {
+      "schema": "BroadcastCampaign",
+      "description": "Emergency notification broadcast dispatches"
+    },
+    "/auditLogs/{logId}": {
+      "schema": "AuditLog",
+      "description": "Command center operational audit logs"
+    }
+  }
+}

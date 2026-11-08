@@ -1,0 +1,6 @@
+{
+  "name": "MORAI SAFE - Community Disaster Management Platform",
+  "description": "Community disaster preparedness and emergency alert platform featuring real-time warnings, live facility map, emergency shelter locator, verified NDMA safety resources, and incident reporting.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
